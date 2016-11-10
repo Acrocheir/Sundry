@@ -11,7 +11,7 @@
         android:layout_width="180dp"
         android:layout_height="230dp"
         android:layout_gravity="center"
-        android:src="@mipmap/ic_launcher" />
+        android:src="@mipmap/unnamed" />
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -35,6 +35,7 @@
                 android:id="@+id/et_UpdateSno"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:inputType="number"
                 android:textSize="20sp" />
             </LinearLayout>
         <LinearLayout

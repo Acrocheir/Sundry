@@ -90,6 +90,7 @@ public class DianMingActivity extends AppCompatActivity {
         btnUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                etCaoXing.setText(null);
                 c.moveToPrevious();
                 tvSno.setText(c.getString(0));
                 tvSname.setText(c.getString(1));
@@ -141,6 +142,7 @@ public class DianMingActivity extends AppCompatActivity {
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                etCaoXing.setText(null);
                 if(index==c.getCount()) {
                 Toast.makeText(getApplicationContext(),"此学生已为最后一名学生！",
                         Toast.LENGTH_SHORT).show();

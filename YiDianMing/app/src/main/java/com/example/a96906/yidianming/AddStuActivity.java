@@ -3,6 +3,7 @@ package com.example.a96906.yidianming;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -82,10 +83,13 @@ public class AddStuActivity extends AppCompatActivity {
                             cv.put(Studnet.KEY_STOUXIANG, getPicture(addBitmap));
                             ivAddTouXiang.setDrawingCacheEnabled(false);
                         }
-                        try {
+                        Cursor c = sqLD.query(Studnet.TABLE,new String[]{Studnet.KEY_SNO},Studnet.KEY_SNO+"=?",
+                                new String[]{etAddSno.getText().toString()},null,null,null);
+                        if(c.getCount()==0) {
                             sqLD.insert(Studnet.TABLE, null, cv);
                             Toast.makeText(getApplicationContext(), "添加成功！", Toast.LENGTH_SHORT).show();
-                        }catch (Exception e) {
+                        }
+                        else{
                             Toast.makeText(getApplicationContext(),"已存在学号为："+etAddSno.getText().toString()+"的学生",
                                     Toast.LENGTH_SHORT).show();
                         }
@@ -116,6 +120,7 @@ public class AddStuActivity extends AppCompatActivity {
                 etAddSno.setText("");
                 etAddSname.setText("");
                 etAddSclass.setText("");
+                ivAddTouXiang.setImageResource(R.mipmap.unnamed);
                 etAddSno.requestFocus(); //获取焦点
             }
         });

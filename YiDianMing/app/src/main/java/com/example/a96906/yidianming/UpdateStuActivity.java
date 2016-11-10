@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.text.SimpleDateFormat;
 
 public class UpdateStuActivity extends AppCompatActivity{
     private DBOpenHelper dbOH;
@@ -115,11 +116,14 @@ public class UpdateStuActivity extends AppCompatActivity{
         btnUpdateData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                String date = null;
+                date = sdf.format(new java.util.Date())+"："; //获取当前时间
                 ContentValues cv = new ContentValues();
                 cv.put(Studnet.KEY_SNO,etUpdateSno.getText().toString());
                 cv.put(Studnet.KEY_SNAME,etUpdateSname.getText().toString());
                 cv.put(Studnet.KEY_SCLASS,etUpdateSclass.getText().toString());
-                cv.put(Studnet.KEY_SBEIZHU,etUpdateCaoXing.getText().toString());
+                cv.put(Studnet.KEY_SBEIZHU,date+etUpdateCaoXing.getText().toString());
                 if (isUpdateTouXiang == true) {
                     ivUpdateTouXiang.setDrawingCacheEnabled(true); //能够获取ImageView中的图片
                     cv.put(Studnet.KEY_STOUXIANG, getPicture(updataBitmap));

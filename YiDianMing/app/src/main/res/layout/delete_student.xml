@@ -11,7 +11,7 @@
         android:layout_width="150dp"
         android:layout_height="170dp"
         android:layout_gravity="center"
-        android:src="@mipmap/ic_launcher"/>
+        android:src="@mipmap/unnamed"/>
 
     <LinearLayout
         android:layout_width="match_parent"
