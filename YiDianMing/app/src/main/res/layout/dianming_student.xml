@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/dianming_student"
+    android:background="@drawable/images"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <!--学生基本信息-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/iv_TouXiang"
+            android:layout_width="100dp"
+            android:layout_height="150dp"
+            android:src="@mipmap/ic_launcher"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="16dp"
+                    android:text="学号："
+                    android:textSize="20sp" />
+                <TextView
+                    android:id="@+id/et_Sno"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:textSize="20sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="16dp"
+                    android:text="姓名："
+                    android:textSize="20sp" />
+                <TextView
+                    android:id="@+id/et_Sname"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:textSize="20sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="16dp"
+                    android:text="班级："
+                    android:textSize="20sp" />
+                <TextView
+                    android:id="@+id/et_Sclass"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:textSize="20sp" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="学生操行情况："
+        android:textSize="20sp" />
+
+    <!--操行情况部分-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp">
+            <RadioGroup
+            android:id="@+id/rg_XuanKuang"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:orientation="vertical">
+            <RadioButton
+                android:id="@+id/cb_ZaiQin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="在勤"
+                android:textSize="17sp" />
+            <RadioButton
+                android:id="@+id/cb_ChiDao"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="迟到"
+                android:textSize="17sp" />
+            <RadioButton
+                android:id="@+id/cb_ZaoTui"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="早退"
+                android:textSize="17sp" />
+            <RadioButton
+                android:id="@+id/cb_KuangKe"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="旷课"
+                android:textSize="17sp" />
+            <RadioButton
+                android:id="@+id/cb_BingJia"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="病假"
+                android:textSize="17sp" />
+            <RadioButton
+                android:id="@+id/cb_BeiZhu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="备注"
+                android:textSize="17sp" />
+            </RadioGroup>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+            <TextView
+                android:id="@+id/et_Caoxing"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:textSize="18sp" />
+            <TextView
+                android:id="@+id/tv_CXBeiZhu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
+                android:textSize="18sp" />
+            </LinearLayout>
+        </LinearLayout>
+        <EditText
+            android:id="@+id/et_BeiZhu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="17sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:gravity="center">
+        <Button
+            android:id="@+id/btn_Up"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="上一个"
+            android:textSize="20sp" />
+        <Button
+            android:id="@+id/btn_Save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:text="保存"
+            android:textSize="20sp" />
+        <Button
+            android:id="@+id/btn_Next"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="下一个"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+</LinearLayout>
