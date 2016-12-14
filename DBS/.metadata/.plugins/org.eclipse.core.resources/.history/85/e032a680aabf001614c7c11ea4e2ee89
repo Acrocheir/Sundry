@@ -1,0 +1,90 @@
+package expStudent;
+
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.Vector;
+
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
+
+public class AddCourse {
+	/*private LinkDB linkDB = new LinkDB();
+	private Connection dbconn;
+	private Course course = new Course();
+	
+	public JPanel jpAddCourse = new JPanel(new GridLayout(3,1));
+	private JPanel jpOne = new JPanel();
+	private JPanel jpTwo = new JPanel();
+	private JLabel jlAdd = new JLabel("添加课程");
+	private JLabel jlCourseId = new JLabel("课程编号：");
+	private JTextField jtfCourseId = new JTextField(10);
+	private JLabel jlCourseName = new JLabel("       课程名称：");
+	private JTextField jtfCourseName = new JTextField(15);
+	private JLabel jlCourseCredit = new JLabel("       学分：");
+	private JTextField jtfCourseCredit = new JTextField(5);
+	private JButton jbtnAdd = new JButton("添加");
+	private JButton jbtnShuaXin = new JButton("刷新");
+	
+	public AddCourse(){
+		jpTwo.add(jlAdd);
+
+		jpOne.add(jlCourseId);
+		jpOne.add(jtfCourseId);
+		jpOne.add(jlCourseName);
+		jpOne.add(jtfCourseName);
+		jpOne.add(jlCourseCredit);
+		jpOne.add(jtfCourseCredit);
+		jpOne.add(jbtnAdd);
+		jpOne.add(jbtnShuaXin);
+		
+		jpAddCourse.add(jpTwo);
+		jpAddCourse.add(jpOne);
+		
+		//添加
+		jbtnAdd.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					if(jtfCourseId.getText().trim().equals("")){
+						JOptionPane.showMessageDialog(null, "课程号不能为空！","错误提示",JOptionPane.ERROR_MESSAGE);
+					}
+					else if(jtfCourseName.getText().trim().equals("")){
+						JOptionPane.showMessageDialog(null, "课程名不能为空！","错误提示",JOptionPane.ERROR_MESSAGE);
+					}
+					else if(jtfCourseCredit.getText().trim().equals("")){
+						JOptionPane.showMessageDialog(null, "学分不能为空！","错误提示",JOptionPane.ERROR_MESSAGE);
+					}
+					else if(!jtfCourseId.getText().trim().equals("")&&!jtfCourseName.getText().trim().equals("")&&!jtfCourseCredit.getText().trim().equals("")){
+						dbconn = linkDB.lindDataBase();
+						Statement stmt = dbconn.createStatement();
+						String strAdd = "insert Course values('"+jtfCourseId.getText().trim()+"','"+jtfCourseName.getText().trim()+"','"+jtfCourseCredit.getText().trim()+"')";
+						System.out.println(strAdd);
+						stmt.executeUpdate(strAdd);
+						dbconn.close();
+
+						JOptionPane.showMessageDialog(null, "添加课程成功！","添加提示",JOptionPane.INFORMATION_MESSAGE);
+					}
+				} catch (Exception e2) {
+					e2.printStackTrace();
+					JOptionPane.showMessageDialog(null, "课程编号不可重复！","错误提示",JOptionPane.ERROR_MESSAGE);
+				}	
+			}
+		});
+		jbtnShuaXin.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				course.Loading();
+			}
+		});
+	}*/
+}

@@ -1,0 +1,66 @@
+package expStudent;
+
+import java.awt.Frame;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.Statement;
+
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
+public class AddStudent {
+	private LinkDB lDB = new LinkDB();
+	private Connection dbconn;
+	public JPanel jpAddOne = new JPanel();
+	public JPanel jpAddTwo = new JPanel();
+	public JPanel jpAddThree = new JPanel();
+	public JPanel jpAddFour = new JPanel();
+	public JPanel jpAddFive = new JPanel();
+	public JPanel jpAddSix = new JPanel();
+	private JTextField jtfSno,jtfSname,jtfSsex,jtfSage,jtfSdate;
+	private JButton jbtnAdd = new JButton("添加");
+	
+	public AddStudent(){
+		jtfSno = new JTextField(15);
+		jtfSname = new JTextField(15);
+		jtfSsex = new JTextField(15);
+		jtfSage = new JTextField(15);
+		jtfSdate = new JTextField(15);
+		jpAddOne.add(new JLabel("学号："));
+		jpAddOne.add(jtfSno);
+		jpAddTwo.add(new JLabel("姓名："));
+		jpAddTwo.add(jtfSname);
+		jpAddThree.add(new JLabel("性别："));
+		jpAddThree.add(jtfSsex);
+		jpAddFour.add(new JLabel("年龄："));
+		jpAddFour.add(jtfSage);
+		jpAddFive.add(new JLabel("出生日期："));
+		jpAddFive.add(jtfSdate);
+		jpAddSix.add(jbtnAdd);
+		
+		jbtnAdd.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				try {
+					dbconn = lDB.lindDataBase();//连接数据库
+					Statement stmt = dbconn.createStatement();
+					String strAdd = "insert ceshi values('"+jtfSno.getText().trim()+"','"+jtfSname.getText().trim()+
+							"','"+jtfSsex.getText().trim()+"',"+jtfSage.getText().trim()+",'"+jtfSdate.getText().trim()+"')";
+					System.out.println(strAdd);
+					stmt.executeUpdate(strAdd);
+					JOptionPane.showMessageDialog(null, "添加学生成功！","添加提示",JOptionPane.INFORMATION_MESSAGE);
+					System.out.println("添加学生成功！");
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+				
+			}
+		});
+	}
+}

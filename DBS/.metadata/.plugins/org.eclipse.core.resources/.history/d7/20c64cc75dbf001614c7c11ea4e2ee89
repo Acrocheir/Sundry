@@ -1,0 +1,101 @@
+package expStudent;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
+
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
+public class DataUpdata {
+	private LinkDB lDB = new LinkDB();
+	private StudentInfo stu = new StudentInfo();
+	private SelectPerson sp = new SelectPerson();
+	private Connection dbconn;
+	public JPanel jpUpdataOne = new JPanel();
+	public JPanel jpUpdataTwo = new JPanel();
+	public JPanel jpUpdataThree = new JPanel();
+	public JPanel jpUpdataFour = new JPanel();
+	public JPanel jpUpdataFive = new JPanel();
+	public JPanel jpUpdataSix = new JPanel();
+	private JTextField jtfSno,jtfSname,jtfSsex,jtfSage,jtfSdate;
+	private JButton jbtnUpdataFind = new JButton("查找");
+	private JButton jbtnUpdata = new JButton("修改");
+	public DataUpdata(){
+		jtfSno = new JTextField(15);
+		jtfSname = new JTextField(15);
+		jtfSsex = new JTextField(15);
+		jtfSage = new JTextField(15);
+		jtfSdate = new JTextField(15);
+		jpUpdataOne.add(new JLabel("学号："));
+		jpUpdataOne.add(jtfSno);
+		jpUpdataOne.add(jbtnUpdataFind);
+		jpUpdataTwo.add(new JLabel("姓名："));
+		jpUpdataTwo.add(jtfSname);
+		jpUpdataThree.add(new JLabel("性别："));
+		jpUpdataThree.add(jtfSsex);
+		jpUpdataFour.add(new JLabel("年龄："));
+		jpUpdataFour.add(jtfSage);
+		jpUpdataFive.add(new JLabel("出生日期："));
+		jpUpdataFive.add(jtfSdate);
+		jpUpdataSix.add(jbtnUpdata);
+		//连接数据库
+		try {
+			dbconn = lDB.lindDataBase();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		jbtnUpdataFind.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				try {
+					/*Statement stmt = dbconn.createStatement();//创建SQL命令对象
+					ResultSet rs = stmt.executeQuery("select * from ceshi where Sno='"+jtfSno.getText()+"'"); //存放找出数据的总行数
+					System.out.println(rs.toString());
+					rs.next();
+					jtfSno.setText(rs.getString(1));
+					jtfSname.setText(rs.getString(2));
+					jtfSsex.setText(rs.getString(3));
+					jtfSage.setText(rs.getString(4));
+					jtfSdate.setText(rs.getString(5));*/
+					SelectPerson.findPerson(jtfSno.getText());
+				/*	jtfSno.setText(stu.getSno());
+					jtfSname.setText(stu.getSname());
+					jtfSsex.setText(stu.getSsex());
+					System.out.println(stu.getSage());
+					jtfSage.setText(stu.getSage());
+					jtfSdate.setText(stu.getSdate());  */
+				} catch (Exception e2) {
+					e2.printStackTrace();
+				}
+			}
+		});
+		jbtnUpdata.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				try {
+				Statement stmt = dbconn.createStatement();
+				String strAdd = "update ceshi set Sno='"+jtfSno.getText()+"',Sname='"+jtfSname.getText()+
+						"',Ssex='"+jtfSsex.getText()+"',Sage='"+jtfSage.getText()+"',Sdata='"+jtfSdate.getText()+
+						"' where Sno='"+jtfSno.getText()+"'";
+				System.out.println(strAdd);
+				stmt.executeUpdate(strAdd);
+				JOptionPane.showMessageDialog(null, "修改学生信息成功！","添加提示",JOptionPane.INFORMATION_MESSAGE);
+			} catch (Exception e2) {
+					// TODO: handle exception
+				}
+			}
+		});
+		
+	}
+}

@@ -1,0 +1,217 @@
+package expStudent;
+
+import java.awt.Dimension;
+import java.awt.GridLayout;
+import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.Locale;
+import java.util.Vector;
+
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+
+public class Course {
+	private Point point;
+	//初始化
+	private static LinkDB linkDB = new LinkDB();
+	private static Connection dbconn;
+	public JScrollPane jspCourse = null;
+	public JTable jtCourse = null;
+	public Vector columName = new Vector();
+	//添加
+	public JPanel jpAddCourse = new JPanel(new GridLayout(3,1));
+	private JPanel jpOne = new JPanel();
+	private JPanel jpTwo = new JPanel();
+	private JPanel jpThree = new JPanel();
+	private JLabel jlAdd = new JLabel("添加课程");
+	private JLabel jlCourseId = new JLabel("课程编号：");
+	private JTextField jtfCourseId = new JTextField(10);
+	private JLabel jlCourseName = new JLabel("       课程名称：");
+	private JTextField jtfCourseName = new JTextField(15);
+	private JLabel jlCourseCredit = new JLabel("       学分：");
+	private JTextField jtfCourseCredit = new JTextField(5);
+	private JButton jbtnAdd = new JButton("添加");
+	//查找
+	private JButton jbtnSelect_CNo = new JButton("查找");
+	private JButton jbtnSelect_CName = new JButton("查找");
+	private JLabel jlStr1 = new JLabel("                                                           ");
+	private JLabel jlStr2 = new JLabel("                                  ");
+	//删除
+	private JButton jbtnDel = new JButton("删除");
+	private int isOK = 0;
+	
+	public Course(){
+		//添加
+		jpTwo.add(jlAdd);
+		jpOne.add(jlCourseId);
+		jpOne.add(jtfCourseId);
+		jpOne.add(jlCourseName);
+		jpOne.add(jtfCourseName);
+		jpOne.add(jlCourseCredit);
+		jpOne.add(jtfCourseCredit);
+		jpOne.add(jbtnAdd);
+		jpAddCourse.add(jpTwo);
+		jpAddCourse.add(jpOne);
+		jpAddCourse.add(jpThree);
+		//查找
+		jpThree.add(jbtnSelect_CNo);
+		jpThree.add(jlStr1);
+		jpThree.add(jbtnSelect_CName);
+		//删除
+		jpThree.add(jlStr2);
+		jpThree.add(jbtnDel);
+		//初始化
+		columName.add("课程代码");
+		columName.add("课程名称");
+		columName.add("课程学分");
+		jtCourse = new JTable(null,columName);//数据加到表格中
+		jtCourse.setPreferredScrollableViewportSize(new Dimension(880, 350)); //表的大小
+		//表中数据居中
+		DefaultTableCellRenderer dtcr = new DefaultTableCellRenderer();
+		dtcr.setHorizontalAlignment(DefaultTableCellRenderer.CENTER);
+		jtCourse.setDefaultRenderer(Object.class, dtcr);
+		jspCourse = new JScrollPane(jtCourse);
+		
+		//添加按钮点击事件
+		jbtnAdd.addActionListener(new ActionListener() {
+					
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					if(jtfCourseId.getText().trim().equals("")){
+						JOptionPane.showMessageDialog(null, "课程号不能为空！","错误提示",JOptionPane.ERROR_MESSAGE);
+					}
+					else if(jtfCourseName.getText().trim().equals("")){
+						JOptionPane.showMessageDialog(null, "课程名不能为空！","错误提示",JOptionPane.ERROR_MESSAGE);
+					}
+					else if(jtfCourseCredit.getText().trim().equals("")){
+						JOptionPane.showMessageDialog(null, "学分不能为空！","错误提示",JOptionPane.ERROR_MESSAGE);
+					}
+					else if(!jtfCourseId.getText().trim().equals("")&&!jtfCourseName.getText().trim().equals("")&&!jtfCourseCredit.getText().trim().equals("")){
+						dbconn = linkDB.lindDataBase();
+						Statement stmt = dbconn.createStatement();
+						String strAdd = "insert Course values('"+jtfCourseId.getText().trim()+"','"+jtfCourseName.getText().trim()+"','"+jtfCourseCredit.getText().trim()+"')";
+						stmt.executeUpdate(strAdd);
+						dbconn.close();
+						Loading(); //刷新列表		
+						JOptionPane.showMessageDialog(null, "添加课程成功！","添加提示",JOptionPane.INFORMATION_MESSAGE);
+					}
+				} catch (Exception e2) {
+					e2.printStackTrace();
+					JOptionPane.showMessageDialog(null, "课程编号不可重复！","错误提示",JOptionPane.ERROR_MESSAGE);
+				}	
+			}
+		});
+		point = jbtnSelect_CNo.getLocation();
+		jbtnSelect_CNo.setBounds(point.x-100, point.y, 100, 100);
+		//查找
+		jbtnSelect_CNo.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(jtfCourseId.getText().trim().equals("")){
+					JOptionPane.showMessageDialog(null, "课程号不能为空！","错误提示",JOptionPane.ERROR_MESSAGE);
+				}else{
+				    Select(jtfCourseId.getText().trim(), 0);
+				}
+			}
+		});
+		jbtnSelect_CName.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(jtfCourseName.getText().trim().equals("")){
+					JOptionPane.showMessageDialog(null, "课程名不能为空！","错误提示",JOptionPane.ERROR_MESSAGE);
+				}else{
+				    Select(jtfCourseName.getText().trim(), 1);
+				}
+			}
+		});
+	}
+	
+	//加载表中的数据
+	public void Loading(){
+		try {
+			dbconn = linkDB.lindDataBase();
+			Statement stmt = dbconn.createStatement();//创建SQL命令对象
+		    ResultSet rs = stmt.executeQuery("select * from Course order by course_code"); //存放找出数据的总行数
+		    
+		    Vector data = new Vector();
+		    DefaultTableModel dtmCourse = new DefaultTableModel();
+		    while(rs.next()){
+		    	Vector vNext = new Vector();
+		    	vNext.add(rs.getString("course_code"));
+		    	vNext.add(rs.getString("course_name"));
+		    	vNext.add(rs.getString("course_credit"));
+		    	data.add(vNext);
+		    	dtmCourse.setDataVector(data, columName);
+		        jtCourse.setModel(dtmCourse);
+		    }
+		    dbconn.close();  
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	//查询
+	public void Select(String str, int i){
+		try {
+			dbconn = linkDB.lindDataBase();
+			Statement stmt = dbconn.createStatement();//创建SQL命令对象
+			ResultSet rs=null;
+			if(i==0){
+		        rs = stmt.executeQuery("select * from Course where course_code='"+str+"' order by course_code"); //存放找出数据的总行数
+			}
+			else if(i==1){
+				rs = stmt.executeQuery("select * from Course where course_name='"+str+"' order by course_code");
+			}
+		    Vector data = new Vector();
+		    DefaultTableModel dtmCourse = new DefaultTableModel();
+		    boolean b = false;
+		    while(rs.next()){
+		    	Vector vNext = new Vector();
+		    	vNext.add(rs.getString("course_code"));
+		    	vNext.add(rs.getString("course_name"));
+		    	vNext.add(rs.getString("course_credit"));
+		    	data.add(vNext);
+		    	dtmCourse.setDataVector(data, columName);
+		        jtCourse.setModel(dtmCourse);
+		        b = true;
+		    }
+		    dbconn.close();
+		    if(b==true)
+				JOptionPane.showMessageDialog(null, "成功找到该课程！","查询提示",JOptionPane.INFORMATION_MESSAGE);
+			else
+				JOptionPane.showMessageDialog(null, "查询失败！暂无该课程信息","查询提示",JOptionPane.INFORMATION_MESSAGE);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	//删除
+	public void Delete(String str, int i){
+		try{
+			dbconn = linkDB.lindDataBase();
+			Statement stmt = dbconn.createStatement();
+			if(i==0){
+			    stmt.executeUpdate("delete Course where course_code='"+str+"'");
+			}
+			else if(i==1){
+				stmt.executeUpdate("delete Course where course_name='"+str+"'");
+			}
+			dbconn.close();
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+}

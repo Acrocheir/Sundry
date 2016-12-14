@@ -1,0 +1,197 @@
+package expStudent;
+
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+import javax.swing.*;
+
+public class MainInfo extends JFrame {
+	private Student ss= new Student();
+	private StudentInfo si = new StudentInfo();
+	private Course course = new Course();
+	private StudentChooseCourse scc = new StudentChooseCourse();
+	private StudentScore sscore = new StudentScore();
+	private TeachPlan tp = new TeachPlan();
+	
+	private CardLayout cardLayout = new CardLayout(); //创建一个间距大小为 0 的新卡片布局
+	private JPanel jpMain = new JPanel(cardLayout); //主面板
+	private JPanel jpZhuJieMian=null, jpStudent=null,jpCourse=null,jpTeachPlan=null,jpStudentCCourse=null,
+			jpStudentScore=null,jpStudentR=null,jpStudentP=null;
+	private JMenuBar jMB = new JMenuBar(); //菜单栏
+	private JMenu jmMenu, jmMenu_StuRP; //菜单选项
+	private JMenuItem jmiStudent,jmiCourse,jmiTeachPlan,jmiStudentCCourse,jmiStudentScore;
+	private JMenuItem jmiStudentR, jmiStudentP;
+	private ImageIcon icon = new ImageIcon("F:\\数据库\\大三上\\实验四 java数据库开发\\StudentMS\\src\\Img\\icon.gif");
+	private JLabel jlBiaoTi = new JLabel("欢迎使用学生管理系统1.0");
+	private JLabel jlIcon = new JLabel(); 
+	private JPanel jpBiaoTi = new JPanel();
+	
+	public MainInfo() {
+		super();
+		this.setTitle("管理系统1.0");
+		this.setSize(900, 600);
+		Toolkit tool = Toolkit.getDefaultToolkit(); //获取屏幕大小
+		Dimension dim = tool.getScreenSize(); //存放获取屏幕的大小
+		int swidth = (int)dim.getWidth(); //宽高度转换为int型
+		int sheight = (int)dim.getHeight();
+		this.setLocation((swidth-900)/2,(sheight-600)/2); //居中
+		
+		jpZhuJieMian = new JPanel();
+		jlIcon.setIcon(icon);
+		jpZhuJieMian.add(jlBiaoTi,BorderLayout.NORTH);
+		jlIcon.setBounds(100, 100, 100, 100);
+		jpZhuJieMian.add(jlIcon, BorderLayout.CENTER);
+		jpMain.add(jpZhuJieMian, "主界面图片");
+		cardLayout.show(jpMain, "主界面图片");
+		
+		jmMenu = new JMenu("管理菜单");
+		jmiStudent = new JMenuItem("学生信息");
+		jmiCourse = new JMenuItem("课程信息");
+		jmiTeachPlan = new JMenuItem("教学计划");
+		jmiStudentCCourse = new JMenuItem("学生选课");
+		jmiStudentScore = new JMenuItem("学生成绩");
+		jmMenu_StuRP = new JMenu("学生奖惩");
+		jmiStudentR = new JMenuItem("奖励管理");
+		jmiStudentP = new JMenuItem("惩罚管理");
+		jmMenu.add(jmiStudent);
+		jmMenu.add(jmiCourse);
+		jmMenu.add(jmiTeachPlan);
+		jmMenu.add(jmiStudentCCourse);
+		jmMenu.add(jmiStudentScore);
+		jmMenu.add(jmMenu_StuRP);
+		jmMenu_StuRP.add(jmiStudentR);
+		jmMenu_StuRP.add(jmiStudentP);
+		jMB.add(jmMenu);
+		this.setJMenuBar(jMB); //设置菜单栏
+		
+		jpStudent = new JPanel();
+		jpCourse = new JPanel();
+		jpStudentCCourse = new JPanel();
+		
+		jmiStudent.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				MainInfo.this.setTitle("学生信息");
+				ss.StuLoading();
+				jpStudent.add(ss.jpSelect,"North");
+				jpStudent.add(ss.jspSelect);
+				jpStudent.add(si.jpStuInsert);
+				jpMain.add(jpStudent, "学生信息模块");
+				cardLayout.show(jpMain, "学生信息模块");
+				MainInfo.this.setVisible(true);
+			}
+		});
+		//课程管理
+		jmiCourse.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				MainInfo.this.setTitle("课程管理");
+				course.Loading();
+				jpCourse.add(course.jpAddCourse,"North");
+				jpCourse.add(course.jspCourse);
+				jpMain.add(jpCourse, "课程管理模块");
+				//MainInfo.this.add(jpCourse);
+				cardLayout.show(jpMain, "课程管理模块");
+				MainInfo.this.setVisible(true);
+			}
+		});
+		
+		//教学计划
+		jmiTeachPlan.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				MainInfo.this.setTitle("教学计划");
+				jpTeachPlan = new JPanel();
+				jpTeachPlan.add(tp.jpTeachPlan);
+				jpTeachPlan.add(tp.jspTeachPlan);
+				jpMain.add(jpTeachPlan, "教学计划管理模块");
+				cardLayout.show(jpMain, "教学计划管理模块");
+				MainInfo.this.setVisible(true);
+			}
+		});
+		
+		//学生选课管理
+		jmiStudentCCourse.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				MainInfo.this.setTitle("学生选课");
+				jpStudentCCourse.add(scc.jpSCC,"North");
+				jpStudentCCourse.add(scc.jspSCC);
+				jpStudentCCourse.add(scc.jpXuanKe);
+				jpMain.add(jpStudentCCourse, "学生选课管理模块");
+				//MainInfo.this.add(jpStudentCCourse);
+				cardLayout.show(jpMain, "学生选课管理模块");
+				MainInfo.this.setVisible(true);
+			}
+		});
+		//学生成绩管理
+		jmiStudentScore.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				jpStudentScore = new JPanel();
+				MainInfo.this.setTitle("学生成绩");
+				jpStudentScore.add(sscore.jpChaXun,"North");
+				jpStudentScore.add(sscore.jspStudentScore);
+				jpMain.add(jpStudentScore,"学生成绩管理模块");
+				cardLayout.show(jpMain, "学生成绩管理模块");
+				MainInfo.this.setVisible(true);
+			}
+		});
+		//学生奖励管理
+		jmiStudentR.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				MainInfo.this.setTitle("学生奖惩");
+				jpStudentR = new JPanel();
+				StudentR sR = new StudentR();
+				jpStudentR.add(sR.jpStuR, "North");
+				jpStudentR.add(sR.jspStu_R);
+				jpMain.add(jpStudentR, "学生奖励管理模块");
+				cardLayout.show(jpMain, "学生奖励管理模块");
+				MainInfo.this.setVisible(true);
+			}
+		});
+		//学生惩罚管理
+		jmiStudentP.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				MainInfo.this.setTitle("学生惩罚");
+				jpStudentP = new JPanel();
+				StudentP sp = new StudentP();
+				jpStudentP.add(sp.jpStuP,"North");
+				jpStudentP.add(sp.jspStu_P);
+				jpMain.add(jpStudentP,"学生惩罚管理模块");
+				cardLayout.show(jpMain, "学生惩罚管理模块");
+				MainInfo.this.setVisible(true);
+			}
+		});
+		
+		//设置图标
+		String path="/Img/RGB.jpg";
+		try{
+			Image img = ImageIO.read(this.getClass().getResource(path));
+			this.setIconImage(img);
+		}catch(IOException e){
+			e.printStackTrace();
+		}
+		
+		this.add(jpMain);
+		this.setResizable(false); //不可最大化
+		this.setVisible(true);
+		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+	}
+	
+	public static void main(String[] args) {
+		new MainInfo();
+	}
+}

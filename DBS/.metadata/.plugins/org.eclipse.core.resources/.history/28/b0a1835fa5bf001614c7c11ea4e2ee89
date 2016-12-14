@@ -1,0 +1,180 @@
+package expStudent;
+
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.Vector;
+
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+
+import org.omg.CORBA.PRIVATE_MEMBER;
+
+public class Student {
+	private LinkDB linkDB = new LinkDB();
+	private Connection dbconn;
+	private boolean x=false;//用于判断是否查找了
+	
+	public JPanel jpSelect = null;
+	public JScrollPane jspSelect=null; //可添加表格的容器
+	//查询
+	private JPanel jpOne = new JPanel();
+	private JPanel jpTwo = new JPanel();
+	private JLabel jlStr0 = new JLabel("学生查询");
+	
+	//控件
+	private JLabel jlSelect = null;
+	private JTextField jtfSelect = null;
+	private JButton jbtnSelect =null, jbtnDelete = null;
+	private JTable jtSelect=null; //表格
+	
+	private Vector columName; //自动增长的对象数组
+	public Student(){
+		
+		jpSelect = new JPanel(new GridLayout(2,1));
+		jlSelect = new JLabel("请输入查找学生的学号：");
+		jtfSelect = new JTextField(15);
+		jbtnSelect = new JButton("查询");
+		jpOne.add(jlStr0);
+		jpTwo.add(jlSelect);
+		jpTwo.add(jtfSelect);
+		jpTwo.add(jbtnSelect);
+		jpSelect.add(jpOne);
+		jpSelect.add(jpTwo);
+		//删除
+		jbtnDelete = new JButton("删除");
+		
+		//表格中显示的数据和列名
+		columName = new Vector();
+		columName.add("学号");
+		columName.add("姓名");
+		columName.add("性别");
+		columName.add("年龄");
+		columName.add("民族");
+		columName.add("学院");
+		columName.add("专业");
+		columName.add("班级");
+		columName.add("政治面貌");
+		columName.add("出生日期");
+		columName.add("家庭地址");
+		columName.add("个人简历");
+		jtSelect = new JTable(null,columName);//数据加到表格中
+		jtSelect.setPreferredScrollableViewportSize(new Dimension(880, 240)); //表的大小
+		//表中数据居中
+		DefaultTableCellRenderer dtcr = new DefaultTableCellRenderer();
+		dtcr.setHorizontalAlignment(DefaultTableCellRenderer.CENTER);
+		jtSelect.setDefaultRenderer(Object.class, dtcr);
+		jspSelect = new JScrollPane(jtSelect);
+		
+		//查询
+		jbtnSelect.addActionListener(new ActionListener() {	
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(jtfSelect.getText().trim().equals(""))
+					JOptionPane.showMessageDialog(null, "学号不能为空！","错误提示",JOptionPane.ERROR_MESSAGE);
+				else{
+					try {
+						dbconn = linkDB.lindDataBase();//连接数据库
+						Statement stmt = dbconn.createStatement();//创建SQL命令对象
+						ResultSet rs = stmt.executeQuery("select student_id,student_name,student_sex,student_age,nation_name,c.academy_name," +
+							"d.major_name,e.class_name,ps_name,student_date,student_address,student_resume " +
+							"from Student a,Nation b, Academy c, Major d, Class e, PoliticsStatus f " +
+							"where a.nation_code=b.nation_code and c.academy_code=d.academy_code and a.major_code=d.major_code " +
+							"and a.class_code=e.class_code and a.ps_id=f.ps_id and a.student_id='"+jtfSelect.getText().trim()+"'");
+						//SelectPerson.findPerson(jtfSelect.getText().trim()); //查找学生
+						DefaultTableModel dtmSelect = new DefaultTableModel();
+						boolean b = false;
+						while(rs.next()){
+							Vector data = new Vector();
+							Vector vNext = new Vector();
+							vNext.add(rs.getString("student_id"));
+							vNext.add(rs.getString("student_name"));
+							vNext.add(rs.getString("student_sex"));
+							vNext.add(rs.getString("student_age"));
+							vNext.add(rs.getString("nation_name"));
+							vNext.add(rs.getString("academy_name"));
+							vNext.add(rs.getString("major_name"));
+							vNext.add(rs.getString("class_name"));
+							vNext.add(rs.getString("ps_name"));
+							vNext.add(rs.getString("student_date"));
+							vNext.add(rs.getString("student_address"));
+							vNext.add(rs.getString("student_resume"));
+							data.add(vNext);
+							dtmSelect.setDataVector(data, columName);
+							jtSelect.setModel(dtmSelect);
+							b = true;
+						}
+						dbconn.close();
+						if(b==true)
+							x=true;
+							JOptionPane.showMessageDialog(null, "学生信息查询成功！","查询提示",JOptionPane.INFORMATION_MESSAGE);
+						else
+							JOptionPane.showMessageDialog(null, "查询失败！无该学生信息","查询提示",JOptionPane.INFORMATION_MESSAGE);
+					} catch (Exception e1) {
+						e1.printStackTrace();
+						JOptionPane.showMessageDialog(null, "此查询无效！","错误提示",JOptionPane.ERROR_MESSAGE);
+					}
+				}
+			}
+		});
+		//删除
+		jbtnDelete.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(x==true)	
+			}
+		});
+	}
+	
+	public void StuLoading(){
+		try {
+			dbconn = linkDB.lindDataBase();//连接数据库
+			Statement stmt = dbconn.createStatement();//创建SQL命令对象
+			ResultSet rs = stmt.executeQuery("select student_id,student_name,student_sex,student_age,nation_name,c.academy_name," +
+				"d.major_name,e.class_name,ps_name,student_date,student_address,student_resume " +
+				"from Student a,Nation b, Academy c, Major d, Class e, PoliticsStatus f " +
+				"where a.nation_code=b.nation_code and c.academy_code=d.academy_code and a.major_code=d.major_code " +
+				"and a.class_code=e.class_code and a.ps_id=f.ps_id order by d.academy_code");
+			DefaultTableModel dtmSelect = new DefaultTableModel();
+			Vector data = new Vector();
+			while(rs.next()){
+				Vector vNext = new Vector();
+				vNext.add(rs.getString("student_id"));
+				vNext.add(rs.getString("student_name"));
+				vNext.add(rs.getString("student_sex"));
+				vNext.add(rs.getString("student_age"));
+				vNext.add(rs.getString("nation_name"));
+				vNext.add(rs.getString("academy_name"));
+				vNext.add(rs.getString("major_name"));
+				vNext.add(rs.getString("class_name"));
+				vNext.add(rs.getString("ps_name"));
+				vNext.add(rs.getString("student_date"));
+				vNext.add(rs.getString("student_address"));
+				vNext.add(rs.getString("student_resume"));
+				data.add(vNext);
+				dtmSelect.setDataVector(data, columName);
+				jtSelect.setModel(dtmSelect);
+			}
+			dbconn.close();
+		}catch (Exception e1) {
+			e1.printStackTrace();
+		}
+	}
+}

@@ -1,0 +1,109 @@
+package expStudent;
+
+import java.awt.Dimension;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.Vector;
+
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+
+public class StudentRP {
+	private LinkDB linkDB = new LinkDB();
+	private Connection dbconn;
+	
+	public JPanel jpStuRP = new JPanel(new GridLayout(3,1));
+	public JScrollPane jspStu_R = null, jspStu_P = null;
+	private JTable jtR = null, jtP = null;
+	private JPanel jpOne = new JPanel();
+	private JPanel jpTwo = new JPanel();
+	private JLabel jlStr0 = new JLabel("奖惩查询");
+	private JLabel jlStudentId = new JLabel("学生学号：");
+	private JTextField jtfStudentId = new JTextField(15);
+	private JButton jbtnChaxun = new JButton("查询");
+	private Vector columnName_R = new Vector();
+	private Vector columnName_P = new Vector();
+	
+	public StudentRP(){
+		jpOne.add(jlStr0);
+		jpTwo.add(jlStudentId);
+		jpTwo.add(jtfStudentId);
+		jpTwo.add(jbtnChaxun);
+		jpStuRP.add(jpOne);
+		jpStuRP.add(jpTwo);
+		columnName_R.add("奖励编号");
+		columnName_R.add("学号");
+		columnName_R.add("姓名");
+		columnName_R.add("学院");
+		columnName_R.add("专业");
+		columnName_R.add("班级");
+		columnName_R.add("奖励时间");
+		columnName_R.add("奖励描述");
+		
+		columnName_P.add("学号");
+		columnName_P.add("惩罚编号");
+		columnName_P.add("惩罚时间");
+		columnName_P.add("惩罚描述");
+		jtR = new JTable(null,columnName_R);
+		jtP = new JTable(null,columnName_P);
+		jtR.setPreferredScrollableViewportSize(new Dimension(880, 180)); //表的大小
+		jtP.setPreferredScrollableViewportSize(new Dimension(880, 180));
+		//表中数据居中
+		DefaultTableCellRenderer dtcr = new DefaultTableCellRenderer();
+		dtcr.setHorizontalAlignment(DefaultTableCellRenderer.CENTER);
+		jtR.setDefaultRenderer(Object.class, dtcr);
+		jspStu_R = new JScrollPane(jtR);
+		jtP.setDefaultRenderer(Object.class, dtcr);
+		jspStu_P = new JScrollPane(jtP);
+		
+		jbtnChaxun.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try{
+				    dbconn = linkDB.lindDataBase();
+				    Statement stmt = dbconn.createStatement();
+				    ResultSet rsR = stmt.executeQuery("select * from Reward");
+				    ResultSet rsP = stmt.executeQuery("select * from Punishment");
+				    Vector dataR = new Vector();
+				    Vector dataP = new Vector();
+				    DefaultTableModel dtmStuRP = new DefaultTableModel();
+				    while(rsR.next()){
+				    	Vector vNext = new Vector();
+				    	vNext.add(rsR.getString("course_code"));
+				    	vNext.add(rsR.getString("course_name"));
+				    	vNext.add(rsR.getString("course_credit"));
+				    	dataR.add(vNext);
+				    	dtmStuRP.setDataVector(dataR, columnName_R);
+				        jtR.setModel(dtmStuRP);
+				    }
+				    while(rsP.next()){
+				    	Vector vNext = new Vector();
+				    	vNext.add(rsP.getString("course_code"));
+				    	vNext.add(rsP.getString("course_name"));
+				    	vNext.add(rsP.getString("course_credit"));
+				    	dataP.add(vNext);
+				    	dtmStuRP.setDataVector(dataP, columnName_P);
+				        jtP.setModel(dtmStuRP);
+				    }
+				    dbconn.close();
+				    JOptionPane.showMessageDialog(null, "奖惩查询成功！","查找提示",JOptionPane.INFORMATION_MESSAGE);
+				}catch(Exception e2){
+					e2.printStackTrace();
+					JOptionPane.showMessageDialog(null, "此查询无效！","错误提示",JOptionPane.ERROR_MESSAGE);
+				}
+			}
+		});
+	}
+}
